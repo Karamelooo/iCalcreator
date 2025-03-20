@@ -76,7 +76,7 @@ class HttpFactory
      * Return created, updated and/or parsed calendar, sending a HTTP redirect header.
      *
      * @param Vcalendar    $calendar
-     * @param null|bool    $utf8Encode
+     * @param null|bool    $mbConvertEncoding
      * @param null|bool    $gzip
      * @param null|bool    $cdType true : Content-Disposition: attachment... (default), false : ...inline...
      * @param null|string  $fileName
@@ -86,7 +86,7 @@ class HttpFactory
      */
     public static function returnCalendar(
         Vcalendar $calendar,
-        ? bool $utf8Encode = false,
+        ? bool $mbConvertEncoding = false,
         ? bool $gzip       = false,
         ? bool $cdType     = true,
         ? string $fileName = null
@@ -97,8 +97,8 @@ class HttpFactory
             $fileName = self::getFakedFilename();
         }
         $output     = $calendar->createCalendar();
-        if( $utf8Encode ?? false ) {
-            $output = utf8_encode( $output );
+        if( $mbConvertEncoding ?? false ) {
+            $output = mb_convert_encoding( $output, 'UTF-8', 'auto' );
         }
         $fsize = null;
         if( $gzip ?? false ) {
